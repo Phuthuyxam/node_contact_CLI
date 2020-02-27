@@ -1,11 +1,14 @@
 const readlineSync = require('readline-sync'); 
+const controller = require('./Controller');
 
 function viewContact(){
-    console.log("view contact");
+    let allContact = controller.readFile;
+    console.log(allContact);
 }
 
 function addContact(){
-    console.log("add contact");
+    controller.appendFile();
+    console.log("<==== add complete! ====>");
 }
 
 function editContact(){ 

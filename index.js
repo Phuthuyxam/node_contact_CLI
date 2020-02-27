@@ -8,13 +8,13 @@
 
 
 const showMess = require('./showmessage');
-const controller = require('./Controller');
+
 
 //  register menu
 function main() { 
 
-    console.log(controller.appendFile("ddd"));
-    // showMess();
+    
+    showMess();
 
 }
 
