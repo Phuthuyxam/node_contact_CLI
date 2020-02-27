@@ -12,6 +12,36 @@ function readFile(){
     // return content;
 }
 
+function findName(name){
+    
+    let oldContent = readFile();
+
+
+    // console.log(oldContent);
+    
+    if(oldContent){
+        // oldContent = oldContent.toString();
+        try {
+            let objContent = JSON.parse(JSON.stringify(oldContent));    
+            
+            let found = objContent.find((element) => {
+                return element.name = name;
+            });
+
+            return found ? found : false;
+
+        } catch (error) {
+            return false;
+        }
+        
+
+    }else{
+        return false;
+    }
+
+
+}
+
 function resultObj(){
     this.readFile = readFile();
     // appendFile : appendFile(),
@@ -59,12 +89,54 @@ resultObj.prototype.appendFile = function appendFile(obj){
 
 }
 
-resultObj.prototype.deleteFile = function deleteFile(id){
+resultObj.prototype.deleteFile = function deleteFile(name){
+    let obj = findName(name);
+    if(obj){
+        let oldContent = readFile();
+        let objContent = JSON.parse(JSON.stringify(oldContent));
 
+        for (let i = 0;  i < objContent.length ; i++ ) {
+            if( objContent[i].name === name ) {
+                objContent.splice(i, 1);
+            }
+        }
+        let objWrite = JSON.stringify(objContent);
+        fs.writeFileSync('data.json',objWrite,'utf8');
+
+    }else{
+        return false;
+    }
 }
 
 resultObj.prototype.saveFile = function saveFile(obj){
-    
+
 }
+
+resultObj.prototype.editByName = function editContact(name){
+    let obj = findName(name);
+
+    if(obj){
+
+        let newName = readlineSync.question("Enter new name: ");
+        let newPhone = readlineSync.question("Enter new phone: ");
+
+        let oldContent = readFile();
+        let objContent = JSON.parse(JSON.stringify(oldContent));
+
+        for (let i = 0;  i < objContent.length ; i++ ) {
+            if( objContent[i].name === name ) {
+                objContent[i]['name'] = newName;
+                objContent[i]['phone'] = newPhone;
+            }
+        }
+        let objWrite = JSON.stringify(objContent);
+        fs.writeFileSync('data.json',objWrite,'utf8');
+
+    }else{
+        return false;
+    }
+}
+
+
 
 module.exports = new resultObj();

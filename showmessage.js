@@ -1,9 +1,24 @@
 const readlineSync = require('readline-sync'); 
 const controller = require('./Controller');
+const Table = require('cli-table');
+
 
 function viewContact(){
     let allContact = controller.readFile;
-    console.log(allContact);
+
+    var table = new Table({
+        head: ['Name', 'Phone']
+      , colWidths: [60, 60]
+    });
+   if(allContact.length > 0){
+        let allContact_ = JSON.parse( JSON.stringify(allContact));
+        allContact_.map((x) => { 
+            table.push(
+                [x.name, x.phone]
+            );
+        });    
+        console.log(table.toString());
+   }
 }
 
 function addContact(){
@@ -11,11 +26,53 @@ function addContact(){
     console.log("<==== add complete! ====>");
 }
 
-function editContact(){ 
-    console.log("edit contact");
+function enterName(){
+    let enterName = readlineSync.question("Enter name! ");
+    controller.editByName(enterName);
+
+}
+
+function editContact(){
+    console.log("1. Enter name contact");
+    console.log("2. View all contact");
+
+    let editcontactChoose = readlineSync.question("Enter you choose!: ");
+    
+    if( editcontactChoose == "1" ){
+        enterName();
+    }else{
+        if(editcontactChoose == "2"){
+            viewContact();
+            enterName();
+        }else{
+            console.log("No option for you choose!");
+            showMess();
+        }
+    }
+
+
 }
 
 function deleteContact() {
+
+    console.log("1. Enter name contact");
+    console.log("2. View all contact");
+
+    let editcontactChoose = readlineSync.question("Enter you choose!: ");
+    
+    if( editcontactChoose == "1" ){
+        let enterName = readlineSync.question("Enter name! ");
+        controller.deleteFile(enterName);
+    }else{
+        if(editcontactChoose == "2"){
+            viewContact();
+            
+        }else{
+            console.log("No option for you choose!");
+            showMess();
+        }
+    }
+
     console.log("delete contact");
 }
 
